@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useSafeSetState } from '../util/hooks';
 import useDataProvider from './useDataProvider';
 import useDataProviderWithDeclarativeSideEffects from './useDataProviderWithDeclarativeSideEffects';
+import useVersion from '../controller/useVersion';
 
 /**
  * Call the data provider on mount
@@ -19,7 +20,7 @@ import useDataProviderWithDeclarativeSideEffects from './useDataProviderWithDecl
  * @param {Object} query.payload The payload object, e.g; { post_id: 12 }
  * @param {Object} options
  * @param {string} options.action Redux action type
- * @param {Function} options.onSuccess Side effect function to be executed upon success of failure, e.g. { onSuccess: response => refresh() } }
+ * @param {Function} options.onSuccess Side effect function to be executed upon success or failure, e.g. { onSuccess: response => refresh() } }
  * @param {Function} options.onFailure Side effect function to be executed upon failure, e.g. { onFailure: error => notify(error.message) } }
  * @param {boolean} options.withDeclarativeSideEffectsSupport Set to true to support legacy side effects (e.g. { onSuccess: { refresh: true } })
  *
@@ -69,7 +70,9 @@ import useDataProviderWithDeclarativeSideEffects from './useDataProviderWithDecl
 const useQuery = (query: Query, options: QueryOptions = {}): UseQueryValue => {
     const { type, resource, payload } = query;
     const { withDeclarativeSideEffectsSupport, ...rest } = options;
-    const [state, setState] = useSafeSetState({
+    const version = useVersion(); // used to allow force reload
+    const requestSignature = JSON.stringify({ query, options: rest, version });
+    const [state, setState] = useSafeSetState<UseQueryValue>({
         data: undefined,
         error: null,
         total: null,
@@ -109,8 +112,7 @@ const useQuery = (query: Query, options: QueryOptions = {}): UseQueryValue => {
                 });
             });
     }, [
-        // deep equality, see https://github.com/facebook/react/issues/14476#issuecomment-471199055
-        JSON.stringify({ query, options: rest }),
+        requestSignature,
         dataProvider,
         dataProviderWithDeclarativeSideEffects,
         setState,
@@ -129,7 +131,7 @@ export interface Query {
 export interface QueryOptions {
     action?: string;
     onSuccess?: (response: any) => any | Object;
-    onError?: (error?: any) => any | Object;
+    onFailure?: (error?: any) => any | Object;
     withDeclarativeSideEffectsSupport?: boolean;
 }
 

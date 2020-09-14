@@ -1,16 +1,21 @@
-import React, { FunctionComponent, useCallback } from 'react';
+import * as React from 'react';
+import {
+    FunctionComponent,
+    useCallback,
+    useRef,
+    useState,
+    useEffect,
+} from 'react';
 import PropTypes from 'prop-types';
 import {
-    makeStyles,
     Select,
     MenuItem,
     InputLabel,
-    Input,
-    FilledInput,
     FormHelperText,
     FormControl,
     Chip,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import classnames from 'classnames';
 import {
     FieldTitle,
@@ -26,6 +31,7 @@ import { FormControlProps } from '@material-ui/core/FormControl';
 const sanitizeRestProps = ({
     addLabel,
     allowEmpty,
+    alwaysOn,
     basePath,
     choices,
     classNamInputWithOptionsPropse,
@@ -160,14 +166,18 @@ const SelectArrayInput: FunctionComponent<
         ...rest
     } = props;
     const classes = useStyles(props);
+    const inputLabel = useRef(null);
+    const [labelWidth, setLabelWidth] = useState(0);
+    useEffect(() => {
+        setLabelWidth(inputLabel.current.offsetWidth);
+    }, []);
+
     const { getChoiceText, getChoiceValue } = useChoices({
         optionText,
         optionValue,
         translateChoice,
     });
-
     const {
-        id,
         input,
         isRequired,
         meta: { error, touched },
@@ -200,7 +210,6 @@ const SelectArrayInput: FunctionComponent<
         },
         [getChoiceValue, renderMenuItemOption]
     );
-
     return (
         <FormControl
             margin={margin}
@@ -210,9 +219,8 @@ const SelectArrayInput: FunctionComponent<
             {...sanitizeRestProps(rest)}
         >
             <InputLabel
-                htmlFor={id}
-                shrink
-                variant={variant}
+                ref={inputLabel}
+                id={`${label}-outlined-label`}
                 error={touched && !!error}
             >
                 <FieldTitle
@@ -224,14 +232,8 @@ const SelectArrayInput: FunctionComponent<
             </InputLabel>
             <Select
                 autoWidth
+                labelId={`${label}-outlined-label`}
                 multiple
-                input={
-                    variant === 'standard' ? (
-                        <Input id={id} />
-                    ) : (
-                        <FilledInput id={id} />
-                    )
-                }
                 error={!!(touched && error)}
                 renderValue={(selected: any[]) => (
                     <div className={classes.chips}>
@@ -251,10 +253,10 @@ const SelectArrayInput: FunctionComponent<
                     </div>
                 )}
                 data-testid="selectArray"
-                variant={variant}
                 {...input}
                 value={input.value || []}
                 {...options}
+                labelWidth={labelWidth}
             >
                 {choices.map(renderMenuItem)}
             </Select>

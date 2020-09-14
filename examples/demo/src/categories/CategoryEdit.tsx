@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import * as React from 'react';
+import { FC } from 'react';
 import {
     Datagrid,
     Edit,
@@ -32,7 +33,8 @@ const CategoryEdit = (props: any) => (
                 reference="products"
                 target="category_id"
                 label="resources.categories.fields.products"
-                perPage={5}
+                perPage={20}
+                fullWidth
             >
                 <Datagrid>
                     <ThumbnailField />
@@ -50,6 +52,7 @@ const CategoryEdit = (props: any) => (
                         options={{ minimumFractionDigits: 2 }}
                     />
                     <NumberField source="stock" />
+                    <NumberField source="sales" />
                     <EditButton />
                 </Datagrid>
             </ReferenceManyField>

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import { Form } from 'react-final-form';
 import { TestTranslationProvider } from 'ra-core';
@@ -12,7 +12,10 @@ describe('<SelectInput />', () => {
     const defaultProps = {
         source: 'language',
         resource: 'posts',
-        choices: [{ id: 'ang', name: 'Angular' }, { id: 'rea', name: 'React' }],
+        choices: [
+            { id: 'ang', name: 'Angular' },
+            { id: 'rea', name: 'React' },
+        ],
     };
 
     it('should use the input parameter value as the initial input value', () => {

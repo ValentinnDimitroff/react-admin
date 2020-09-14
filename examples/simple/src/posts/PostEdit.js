@@ -1,5 +1,5 @@
 import RichTextInput from 'ra-input-rich-text';
-import React from 'react';
+import * as React from 'react';
 import {
     TopToolbar,
     AutocompleteInput,
@@ -45,7 +45,7 @@ const EditActions = ({ basePath, data, hasShow }) => (
 
 const PostEdit = ({ permissions, ...props }) => (
     <Edit title={<PostTitle />} actions={<EditActions />} {...props}>
-        <TabbedForm initialValues={{ average_note: 0 }}>
+        <TabbedForm initialValues={{ average_note: 0 }} warnWhenUnsavedChanges>
             <FormTab label="post.form.summary">
                 <TextInput disabled source="id" />
                 <TextInput source="title" validate={required()} resettable />

@@ -181,6 +181,7 @@ export interface CreateResult {
 
 export interface DeleteParams {
     id: Identifier;
+    previousData: Record;
 }
 export interface DeleteResult {
     data?: Record;
@@ -284,6 +285,7 @@ export type LegacyDataProvider = (
 export interface ReduxState {
     admin: {
         ui: {
+            automaticRefreshEnabled: boolean;
             optimistic: boolean;
             sidebarOpen: boolean;
             viewVersion: number;
@@ -295,16 +297,17 @@ export interface ReduxState {
                     [key: number]: Record;
                 };
                 list: {
-                    params: any;
-                    ids: Identifier[];
-                    loadedOnce: boolean;
-                    selectedIds: Identifier[];
-                    total: number;
                     cachedRequests?: {
                         ids: Identifier[];
                         total: number;
                         validity: Date;
                     };
+                    expanded: Identifier[];
+                    ids: Identifier[];
+                    loadedOnce: boolean;
+                    params: any;
+                    selectedIds: Identifier[];
+                    total: number;
                 };
                 validity: {
                     [key: string]: Date;

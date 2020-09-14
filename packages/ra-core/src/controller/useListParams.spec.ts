@@ -1,4 +1,4 @@
-import { getQuery } from './useListParams';
+import { getQuery, getNumberOrDefault } from './useListParams';
 import {
     SORT_DESC,
     SORT_ASC,
@@ -8,10 +8,12 @@ describe('useListParams', () => {
     describe('getQuery', () => {
         it('Returns the values from the location first', () => {
             const query = getQuery({
-                location: {
-                    search: `?page=3&perPage=15&sort=name&order=ASC&filter=${JSON.stringify(
-                        { name: 'marmelab' }
-                    )}`,
+                queryFromLocation: {
+                    page: 3,
+                    perPage: 15,
+                    sort: 'name',
+                    order: SORT_ASC,
+                    filter: { name: 'marmelab' },
                 },
                 params: {
                     page: 1,
@@ -42,8 +44,8 @@ describe('useListParams', () => {
         });
         it('Extends the values from the location with those from the props', () => {
             const query = getQuery({
-                location: {
-                    search: `?filter=${JSON.stringify({ name: 'marmelab' })}`,
+                queryFromLocation: {
+                    filter: { name: 'marmelab' },
                 },
                 params: {
                     page: 1,
@@ -74,9 +76,7 @@ describe('useListParams', () => {
         });
         it('Sets the values from the redux store if location does not have them', () => {
             const query = getQuery({
-                location: {
-                    search: ``,
-                },
+                queryFromLocation: {},
                 params: {
                     page: 2,
                     perPage: 10,
@@ -106,9 +106,7 @@ describe('useListParams', () => {
         });
         it('Extends the values from the redux store with those from the props', () => {
             const query = getQuery({
-                location: {
-                    search: ``,
-                },
+                queryFromLocation: {},
                 params: {
                     page: 2,
                     sort: 'city',
@@ -137,9 +135,7 @@ describe('useListParams', () => {
         });
         it('Uses the filterDefaultValues if neither the location or the redux store have them', () => {
             const query = getQuery({
-                location: {
-                    search: ``,
-                },
+                queryFromLocation: {},
                 params: {},
                 filterDefaultValues: { city: 'Nancy' },
                 perPage: 50,
@@ -158,6 +154,32 @@ describe('useListParams', () => {
                     city: 'Nancy',
                 },
             });
+        });
+    });
+
+    describe('getNumberOrDefault', () => {
+        it('should return the parsed number', () => {
+            const result = getNumberOrDefault('29', 2);
+
+            expect(result).toEqual(29);
+        });
+
+        it('should return the default number when passing a not valid number', () => {
+            const result = getNumberOrDefault('covfefe', 2);
+
+            expect(result).toEqual(2);
+        });
+
+        it('should return the default number when passing an undefined number', () => {
+            const result = getNumberOrDefault(undefined, 2);
+
+            expect(result).toEqual(2);
+        });
+
+        it('should not return the default number when passing "0"', () => {
+            const result = getNumberOrDefault('0', 2);
+
+            expect(result).toEqual(0);
         });
     });
 });

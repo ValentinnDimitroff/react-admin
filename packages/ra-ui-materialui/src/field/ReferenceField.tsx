@@ -1,4 +1,5 @@
-import React, { Children, cloneElement, FC, memo, ReactElement } from 'react';
+import * as React from 'react';
+import { Children, cloneElement, FC, memo, ReactElement } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import get from 'lodash/get';
@@ -14,19 +15,8 @@ import {
 import LinearProgress from '../layout/LinearProgress';
 import Link from '../Link';
 import sanitizeRestProps from './sanitizeRestProps';
-import { ClassNameMap } from '@material-ui/styles';
-import { FieldProps, InjectedFieldProps } from './types';
-
-interface ReferenceFieldProps extends FieldProps, InjectedFieldProps {
-    children: ReactElement;
-    classes?: Partial<ClassNameMap<ReferenceFieldClassKey>>;
-    reference: string;
-    resource?: string;
-    source: string;
-    translateChoice?: Function | boolean;
-    linkType?: LinkToType;
-    link?: LinkToType;
-}
+import { FieldProps, fieldPropTypes, InjectedFieldProps } from './types';
+import { ClassesOverride } from '../types';
 
 /**
  * Fetch reference record, and delegate rendering to child component.
@@ -118,8 +108,9 @@ ReferenceField.propTypes = {
     reference: PropTypes.string.isRequired,
     resource: PropTypes.string,
     sortBy: PropTypes.string,
+    sortByOrder: fieldPropTypes.sortByOrder,
     source: PropTypes.string.isRequired,
-    translateChoice: PropTypes.func,
+    translateChoice: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
     linkType: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.bool,
@@ -138,6 +129,17 @@ ReferenceField.defaultProps = {
     link: 'edit',
 };
 
+export interface ReferenceFieldProps extends FieldProps, InjectedFieldProps {
+    children: ReactElement;
+    classes?: ClassesOverride<typeof useStyles>;
+    reference: string;
+    resource?: string;
+    source: string;
+    translateChoice?: Function | boolean;
+    linkType?: LinkToType;
+    link?: LinkToType;
+}
+
 const useStyles = makeStyles(
     theme => ({
         link: {
@@ -149,20 +151,6 @@ const useStyles = makeStyles(
 
 // useful to prevent click bubbling in a datagrid with rowClick
 const stopPropagation = e => e.stopPropagation();
-
-type ReferenceFieldClassKey = 'link';
-
-interface ReferenceFieldViewProps
-    extends FieldProps,
-        InjectedFieldProps,
-        UseReferenceProps {
-    classes?: Partial<ClassNameMap<ReferenceFieldClassKey>>;
-    reference: string;
-    resource?: string;
-    translateChoice?: Function | boolean;
-    resourceLinkPath?: ReturnType<typeof getResourceLinkPath>;
-    children?: ReactElement;
-}
 
 export const ReferenceFieldView: FC<ReferenceFieldViewProps> = props => {
     const {
@@ -192,6 +180,7 @@ export const ReferenceFieldView: FC<ReferenceFieldViewProps> = props => {
                 aria-errormessage={error.message ? error.message : error}
                 color="error"
                 fontSize="small"
+                role="presentation"
             />
         );
     }
@@ -245,8 +234,20 @@ ReferenceFieldView.propTypes = {
         PropTypes.oneOf([false]),
     ]) as React.Validator<string | false>,
     source: PropTypes.string,
-    translateChoice: PropTypes.bool,
+    translateChoice: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
 };
+
+export interface ReferenceFieldViewProps
+    extends FieldProps,
+        InjectedFieldProps,
+        UseReferenceProps {
+    classes?: ClassesOverride<typeof useStyles>;
+    reference: string;
+    resource?: string;
+    translateChoice?: Function | boolean;
+    resourceLinkPath?: ReturnType<typeof getResourceLinkPath>;
+    children?: ReactElement;
+}
 
 const PureReferenceFieldView = memo(ReferenceFieldView);
 

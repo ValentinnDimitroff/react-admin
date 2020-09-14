@@ -9,12 +9,13 @@ import React, {
 } from 'react';
 import Downshift, { DownshiftProps } from 'downshift';
 import get from 'lodash/get';
-import { makeStyles, TextField } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { TextFieldProps } from '@material-ui/core/TextField';
 import {
     useInput,
     FieldTitle,
-    InputProps,
+    ChoicesInputProps,
     useSuggestions,
     warning,
 } from 'ra-core';
@@ -91,13 +92,15 @@ interface Options {
  * <AutocompleteInput source="author_id" options={{ color: 'secondary', InputLabelProps: { shrink: true } }} />
  */
 const AutocompleteInput: FunctionComponent<
-    InputProps<TextFieldProps & Options> & DownshiftProps<any>
+    ChoicesInputProps<TextFieldProps & Options> &
+        Omit<DownshiftProps<any>, 'onChange'>
 > = props => {
     const {
         allowEmpty,
         className,
         classes: classesOverride,
         choices = [],
+        disabled,
         emptyText,
         emptyValue,
         format,
@@ -138,6 +141,7 @@ const AutocompleteInput: FunctionComponent<
         variant = 'filled',
         ...rest
     } = props;
+
     if (isValidElement(optionText) && !inputText) {
         throw new Error(`If the optionText prop is a React element, you must also specify the inputText prop:
         <AutocompleteInput
@@ -152,6 +156,16 @@ const AutocompleteInput: FunctionComponent<
     matchSuggestion={(filterValue, suggestion) => true}
 />
         `
+    );
+
+    warning(
+        source === undefined,
+        `If you're not wrapping the AutocompleteInput inside a ReferenceInput, you must provide the source prop`
+    );
+
+    warning(
+        choices === undefined,
+        `If you're not wrapping the AutocompleteInput inside a ReferenceInput, you must provide the choices prop`
     );
 
     const classes = useStyles(props);
@@ -229,11 +243,13 @@ const AutocompleteInput: FunctionComponent<
         // If we have a value, set the filter to its text so that
         // Downshift displays it correctly
         setFilterValue(
-            input.value
-                ? inputText
-                    ? inputText(getChoiceText(selectedItem).props.record)
-                    : getChoiceText(selectedItem)
-                : ''
+            typeof input.value === 'undefined' ||
+                input.value === null ||
+                selectedItem === null
+                ? ''
+                : inputText
+                ? inputText(getChoiceText(selectedItem).props.record)
+                : getChoiceText(selectedItem)
         );
     }, [
         input.value,
@@ -286,6 +302,7 @@ const AutocompleteInput: FunctionComponent<
     const handleBlur = useCallback(
         event => {
             handleFilterChange('');
+
             // If we had a value before, set the filter back to its text so that
             // Downshift displays it correctly
             setFilterValue(
@@ -366,9 +383,11 @@ const AutocompleteInput: FunctionComponent<
                                 onChange: event => {
                                     handleFilterChange(event);
                                     setFilterValue(event.target.value);
-                                    onChange!(event as React.ChangeEvent<
-                                        HTMLInputElement
-                                    >);
+                                    onChange!(
+                                        event as React.ChangeEvent<
+                                            HTMLInputElement
+                                        >
+                                    );
                                 },
                                 onFocus,
                             }}
@@ -397,6 +416,7 @@ const AutocompleteInput: FunctionComponent<
                                     helperText={helperText}
                                 />
                             }
+                            disabled={disabled}
                             variant={variant}
                             margin={margin}
                             fullWidth={fullWidth}

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
     BooleanField,
     Datagrid,
@@ -10,13 +10,15 @@ import {
     NumberField,
     SearchInput,
 } from 'react-admin';
-import { useMediaQuery, makeStyles, Theme } from '@material-ui/core';
+import { useMediaQuery, Theme } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import SegmentsField from './SegmentsField';
 import SegmentInput from './SegmentInput';
 import CustomerLinkField from './CustomerLinkField';
 import ColoredNumberField from './ColoredNumberField';
 import MobileGrid from './MobileGrid';
+import VisitorListAside from './VisitorListAside';
 
 const VisitorFilter = (props: any) => (
     <Filter {...props}>
@@ -37,12 +39,14 @@ const VisitorList = (props: any) => {
     const isXsmall = useMediaQuery<Theme>(theme =>
         theme.breakpoints.down('xs')
     );
+    const isSmall = useMediaQuery<Theme>(theme => theme.breakpoints.down('sm'));
     return (
         <List
             {...props}
-            filters={<VisitorFilter />}
+            filters={isSmall ? <VisitorFilter /> : null}
             sort={{ field: 'last_seen', order: 'DESC' }}
             perPage={25}
+            aside={<VisitorListAside />}
         >
             {isXsmall ? (
                 <MobileGrid />
@@ -60,7 +64,11 @@ const VisitorList = (props: any) => {
                         options={{ style: 'currency', currency: 'USD' }}
                     />
                     <DateField source="latest_purchase" showTime />
-                    <BooleanField source="has_newsletter" label="News." />
+                    <BooleanField
+                        source="has_newsletter"
+                        label="News."
+                        size="small"
+                    />
                     <SegmentsField />
                 </Datagrid>
             )}

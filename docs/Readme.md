@@ -23,7 +23,7 @@ Read the [Tutorial](./Tutorial.md) for a 30 minutes introduction. After that, co
 
 ```jsx
 // in app.js
-import React from 'react';
+import * as React from "react";
 import { render } from 'react-dom';
 import { Admin, Resource } from 'react-admin';
 import simpleRestProvider from 'ra-data-simple-rest';
@@ -38,12 +38,12 @@ render(
 );
 ```
 
-The `<Resource>` component is a configuration component that allows to define sub components for each of the admin view: `list`, `edit`, and `create`. These components use Material UI and custom components from react-admin:
+The `<Resource>` component is a configuration component that allows defining sub components for each of the admin view: `list`, `edit`, and `create`. These components use Material UI and custom components from react-admin:
 
 {% raw %}
 ```jsx
 // in posts.js
-import React from 'react';
+import * as React from "react";
 import { List, Datagrid, Edit, Create, SimpleForm, DateField, TextField, EditButton, TextInput, DateInput } from 'react-admin';
 import BookIcon from '@material-ui/icons/Book';
 export const PostIcon = BookIcon;

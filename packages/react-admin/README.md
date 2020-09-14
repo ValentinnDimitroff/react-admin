@@ -27,7 +27,7 @@ A frontend Framework for building admin applications running in the browser on t
 * Super easy to extend and override (it's just React components)
 * Highly customizable interface
 * Can connect to multiple backends
-* Leverages the best libraries in the React ecosystem (Redux, redux-form, redux-saga, material-ui, recompose)
+* Leverages the best libraries in the React ecosystem (Redux, redux-form, redux-saga, material-ui)
 * Can be included in another React app
 * Inspired by the popular [ng-admin](https://github.com/marmelab/ng-admin) library (also by marmelab)
 
@@ -56,7 +56,7 @@ Read the [Tutorial](http://marmelab.com/react-admin/Tutorial.html) for a 15 minu
 
 ```jsx
 // in app.js
-import React from 'react';
+import * as React from "react";
 import { render } from 'react-dom';
 import { Admin, Resource } from 'react-admin';
 import restProvider from 'ra-data-simple-rest';
@@ -75,7 +75,7 @@ The `<Resource>` component is a configuration component that allows to define su
 
 ```jsx
 // in posts.js
-import React from 'react';
+import * as React from "react";
 import { List, Datagrid, Edit, Create, SimpleForm, DateField, TextField, EditButton, TextInput, DateInput } from 'react-admin';
 export PostIcon from '@material-ui/core/svg-icons/action/book';
 
@@ -123,7 +123,7 @@ export const PostCreate = (props) => (
 );
 ```
 
-## Does It Work With My API?
+## Does It Work With My API
 
 Yes.
 

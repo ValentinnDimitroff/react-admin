@@ -9,7 +9,7 @@ The `<Admin>` component creates an application with its own state, routing, and 
 
 ```jsx
 // in src/App.js
-import React from 'react';
+import * as React from "react";
 
 import { Admin, Resource } from 'react-admin';
 import simpleRestProvider from 'ra-data-simple-rest';
@@ -30,7 +30,7 @@ Here are all the props accepted by the component:
 - [The `<Admin>` Component](#the-admin-component)
   - [`dataProvider`](#dataprovider)
   - [`authProvider`](#authprovider)
-  - [`i18nProvider`](#internationalization)
+  - [`i18nProvider`](#i18nprovider)
   - [`title`](#title)
   - [`dashboard`](#dashboard)
   - [`catchAll`](#catchall)
@@ -44,7 +44,6 @@ Here are all the props accepted by the component:
   - [`logoutButton`](#logoutbutton)
   - [`initialState`](#initialstate)
   - [`history`](#history)
-  - [Internationalization](#internationalization)
   - [Declaring resources at runtime](#declaring-resources-at-runtime)
   - [Using react-admin without `<Admin>` and `<Resource>`](#using-react-admin-without-admin-and-resource)
 
@@ -68,6 +67,32 @@ const dataProvider = {
 
 The `dataProvider` is also the ideal place to add custom HTTP headers, authentication, etc. The [Data Providers Chapter](./DataProviders.md) of the documentation lists available data providers, and explains how to build your own.
 
+## `authProvider`
+
+The `authProvider` prop expect an object with 5 methods, each returning a Promise, to control the authentication strategy:
+
+```jsx
+const authProvider = {
+    login: params => Promise.resolve(),
+    logout: params => Promise.resolve(),
+    checkAuth: params => Promise.resolve(),
+    checkError: error => Promise.resolve(),
+    getPermissions: params => Promise.resolve(),
+};
+
+const App = () => (
+    <Admin authProvider={authProvider} dataProvider={simpleRestProvider('http://path.to.my.api')}>
+        ...
+    </Admin>
+);
+```
+
+The [Authentication documentation](./Authentication.md) explains how to implement these functions in detail.
+
+## `i18nProvider`
+
+The `i18nProvider` props let you translate the GUI. The [Translation Documentation](./Translation.md) details this process.
+
 ## `title`
 
 On error pages, the header of an admin app uses 'React Admin' as the main app title. Use the `title` to customize it.
@@ -86,7 +111,7 @@ By default, the homepage of an admin app is the `list` of the first child `<Reso
 
 ```jsx
 // in src/Dashboard.js
-import React from 'react';
+import * as React from "react";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { Title } from 'react-admin';
@@ -100,7 +125,7 @@ export default () => (
 
 ```jsx
 // in src/App.js
-import React from 'react';
+import * as React from "react";
 import { Admin } from 'react-admin';
 import simpleRestProvider from 'ra-data-simple-rest';
 
@@ -125,7 +150,7 @@ You can customize this page to use the component of your choice by passing it as
 
 ```jsx
 // in src/NotFound.js
-import React from 'react';
+import * as React from "react";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { Title } from 'react-admin';
@@ -142,7 +167,7 @@ export default () => (
 
 ```jsx
 // in src/App.js
-import React from 'react';
+import * as React from "react";
 import { Admin } from 'react-admin';
 import simpleRestProvider from 'ra-data-simple-rest';
 
@@ -167,7 +192,8 @@ If you want to add or remove menu items, for instance to link to non-resources p
 
 ```jsx
 // in src/Menu.js
-import React, { createElement } from 'react';
+import * as React from 'react';
+import { createElement } from 'react';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from '@material-ui/core';
 import { MenuItemLink, getResources } from 'react-admin';
@@ -193,7 +219,7 @@ const Menu = ({ onMenuClick, logout }) => {
             <MenuItemLink
                 to="/custom-route"
                 primaryText="Miscellaneous"
-                leftIcon={LabelIcon}
+                leftIcon={<LabelIcon />}
                 onClick={onMenuClick}
                 sidebarIsOpen={open}
             />
@@ -290,10 +316,10 @@ For more details on custom layouts, check [the Theming documentation](./Theming.
 
 The `<Admin>` app uses [Redux](http://redux.js.org/) to manage state. The state has the following keys:
 
-```jsx
+```json
 {
-    admin: { /*...*/ }, // used by react-admin
-    routing: { /*...*/ }, // used by connected-react-router
+    "admin": { /*...*/ }, // used by react-admin
+    "routing": { /*...*/ }, // used by connected-react-router
 }
 ```
 
@@ -314,7 +340,7 @@ To register this reducer in the `<Admin>` app, simply pass it in the `customRedu
 {% raw %}
 ```jsx
 // in src/App.js
-import React from 'react';
+import * as React from "react";
 import { Admin } from 'react-admin';
 
 import bitcoinRateReducer from './bitcoinRateReducer';
@@ -331,11 +357,11 @@ export default App;
 
 Now the state will look like:
 
-```jsx
+```json
 {
-    admin: { /*...*/ }, // used by react-admin
-    routing: { /*...*/ }, // used by connected-react-router
-    bitcoinRate: 123, // managed by rateReducer
+    "admin": { /*...*/ }, // used by react-admin
+    "routing": { /*...*/ }, // used by connected-react-router
+    "bitcoinRate": 123, // managed by rateReducer
 }
 ```
 
@@ -361,7 +387,7 @@ To register this saga in the `<Admin>` app, simply pass it in the `customSagas` 
 
 ```jsx
 // in src/App.js
-import React from 'react';
+import * as React from "react";
 import { Admin } from 'react-admin';
 
 import bitcoinSaga from './bitcoinSaga';
@@ -381,7 +407,7 @@ To register your own routes, create a module returning a list of [react-router-d
 
 ```jsx
 // in src/customRoutes.js
-import React from 'react';
+import * as React from "react";
 import { Route } from 'react-router-dom';
 import Foo from './Foo';
 import Bar from './Bar';
@@ -398,7 +424,7 @@ Then, pass this array as `customRoutes` prop in the `<Admin>` component:
 
 ```jsx
 // in src/App.js
-import React from 'react';
+import * as React from "react";
 import { Admin } from 'react-admin';
 
 import customRoutes from './customRoutes';
@@ -424,7 +450,7 @@ to design the screen the way you want.
 
 ```jsx
 // in src/Foo.js
-import React from 'react';
+import * as React from "react";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { Title } from 'react-admin';
@@ -441,29 +467,7 @@ const Foo = () => (
 export default Foo;
 ```
 
-**Tip**: Custom routes can be [a `<Redirect>` route](https://reacttraining.com/react-router/web/api/Redirect), too. 
-
-## `authProvider`
-
-The `authProvider` prop expect an object with 5 methods, each returning a Promise, to control the authentication strategy:
-
-```jsx
-const authProvider = {
-    login: params => Promise.resolve(),
-    logout: params => Promise.resolve(),
-    checkAuth: params => Promise.resolve(),
-    checkError: error => Promise.resolve(),
-    getPermissions: params => Promise.resolve(),
-};
-
-const App = () => (
-    <Admin authProvider={authProvider} dataProvider={simpleRestProvider('http://path.to.my.api')}>
-        ...
-    </Admin>
-);
-```
-
-The [Authentication documentation](./Authentication.md) explains how to implement these functions in detail.
+**Tip**: Custom routes can be [a `<Redirect>` route](https://reacttraining.com/react-router/web/api/Redirect), too.
 
 ## `loginPage`
 
@@ -483,7 +487,7 @@ You can also disable it completely along with the `/login` route by passing `fal
 
 See The [Authentication documentation](./Authentication.md#customizing-the-login-and-logout-components) for more details.
 
-**Tip**: Before considering to write your own login page component, please take a look at how to change the default [background image](./Theming.md#using-a-custom-login-page) or the [Material UI theme](#theme). See the [Authentication documentation](./Authentication.md#customizing-the-login-and-logout-components) for more details.
+**Tip**: Before considering writing your own login page component, please take a look at how to change the default [background image](./Theming.md#using-a-custom-login-page) or the [Material UI theme](#theme). See the [Authentication documentation](./Authentication.md#customizing-the-login-and-logout-components) for more details.
 
 ## `logoutButton`
 
@@ -532,7 +536,6 @@ const App = () => (
 );
 ```
 
-
 ## `history`
 
 By default, react-admin creates URLs using a hash sign (e.g. "myadmin.acme.com/#/posts/123"). The hash portion of the URL (i.e. `#/posts/123` in the example) contains the main application route. This strategy has the benefit of working without a server, and with legacy web browsers. But you may want to use another routing strategy, e.g. to allow server-side rendering.
@@ -540,7 +543,7 @@ By default, react-admin creates URLs using a hash sign (e.g. "myadmin.acme.com/#
 You can create your own `history` function (compatible with [the `history` npm package](https://github.com/reacttraining/history)), and pass it to the `<Admin>` component to override the default history strategy. For instance, to use `browserHistory`:
 
 ```jsx
-import React from 'react';
+import * as React from "react";
 import { createBrowserHistory as createHistory } from 'history';
 
 const history = createHistory();
@@ -552,19 +555,18 @@ const App = () => (
 );
 ```
 
-## Internationalization
-
-The `i18nProvider` props let you translate the GUI. The [Translation Documentation](./Translation.md) details this process.
-
 ## Declaring resources at runtime
 
-You might want to dynamically define the resources when the app starts. The `<Admin>` component accepts a function as its child and this function can return a Promise. If you also defined an `authProvider`, the child function will receive the result of a call to `authProvider.getPermissions()` (you can read more about this in the [Authorization](./Authorization.md) chapter).
+You might want to dynamically define the resources when the app starts. To do so, you have two options: using a function as `<Admin>` child, or unplugging it to use a combination of `AdminContext` and `<AdminUI>` instead.
+
+### Using a Function As `<Admin>` Child
+
+The `<Admin>` component accepts a function as its child and this function can return a Promise. If you also defined an `authProvider`, the child function will receive the result of a call to `authProvider.getPermissions()` (you can read more about this in the [Authorization](./Authorization.md) chapter).
 
 For instance, getting the resource from an API might look like:
 
 ```jsx
-import React from 'react';
-
+import * as React from "react";
 import { Admin, Resource } from 'react-admin';
 import simpleRestProvider from 'ra-data-simple-rest';
 
@@ -592,6 +594,45 @@ const App = () => (
         {fetchResources}
     </Admin>
 );
+```
+
+### Unplugging the `<Admin>` using `<AdminContext>` and `<AdminUI>`
+
+Setting Resources dynamically using the children-as-function syntax may not be enough in all cases, because this function can't execute hooks.
+
+So it's impossible, for instance, to have a dynamic list of resources based on a call to the `dataProvider` (since the `dataProvider` is only defined after the `<Admin>` component renders).
+
+To overcome this limitation, you can build your own `<Admin>` component using two lower-level components: `<AdminContext>` (responsible for putting the providers in contexts) and `<AdminUI>` (responsible for displaying the UI). Here is an example:
+
+``` jsx
+import * as React, { useEffect, useState } from 'react';
+import { AdminContext, AdminUI, Resource, ListGuesser, useDataProvider } from 'react-admin';
+
+function App() {
+    return (
+        <AdminContext dataProvider={myDataProvider}>
+            <AsyncResources />
+        </AdminContext>
+    );
+}
+
+function AsyncResources() {
+    const [resources, setResources] = useState([]);
+    const dataProvider = useDataProvider();
+
+    useEffect(() => {
+        // Note that the `getResources` is not provided by react-admin. You have to implement your own custom verb.
+        dataProvider.getResources().then(r => setResources(r));
+    }, []);
+
+    return (
+        <AdminUI>
+            {resources.map(resource => (
+                <Resource name={resource.name} key={resource.key} list={ListGuesser} />
+            ))}
+        </AdminUI>
+    );
+}
 ```
 
 ## Using react-admin without `<Admin>` and `<Resource>`

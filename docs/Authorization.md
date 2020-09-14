@@ -5,7 +5,7 @@ title: "Authorization"
 
 # Authorization
 
-Some applications may require fine grained permissions to enable or disable access to certain features. Since there are many different possible strategies (single role, multiple roles or rights, ACLs, etc.), react-admin simply provides hooks to execute your own authorization code.
+Some applications may require fine-grained permissions to enable or disable access to certain features. Since there are many possible strategies (single role, multiple roles or rights, ACLs, etc.), react-admin simply provides hooks to execute your own authorization code.
 
 By default, a react-admin app doesn't check authorization. However, if needed, it will rely on the `authProvider` introduced in the [Authentication documentation](./Authentication.md) to do so. You should read that chapter first.
 
@@ -164,7 +164,7 @@ React-admin injects the permissions into the component provided as a [`dashboard
 
 ```jsx
 // in src/Dashboard.js
-import React from 'react';
+import * as React from "react";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { Title } from 'react-admin';
@@ -187,7 +187,7 @@ You might want to check user permissions inside a [custom page](./Admin.md#custo
 
 ```jsx
 // in src/MyPage.js
-import React from 'react';
+import * as React from "react";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { usePermissions } from 'react-admin';
@@ -207,7 +207,7 @@ const MyPage = () => {
 export default MyPage;
 
 // in src/customRoutes.js
-import React from 'react';
+import * as React from "react";
 import { Route } from 'react-router-dom';
 import MyPage from './MyPage';
 
@@ -238,7 +238,7 @@ What if you want to check the permissions inside a [custom menu](./Admin.md#menu
 
 ```jsx
 // in src/myMenu.js
-import React from 'react';
+import * as React from "react";
 import { MenuItemLink, usePermissions } from 'react-admin';
 
 const Menu = ({ onMenuClick, logout }) => {

@@ -45,6 +45,9 @@ title: "Reference"
 * [`<Filter>`](./List.md#filters)
 * `<FilterButton>`
 * `<FilterForm>`
+* [`<FilterList>`](./List.md#the-filterlist-sidebar)
+* [`<FilterListItem>`](./List.md#the-filterlist-sidebar)
+* [`<FilterLiveSearch>`](./List.md#live-search)
 * [`<FormDataConsumer>`](./Inputs.md#linking-two-inputs)
 * [`<FormTab>`](./CreateEdit.md#the-tabbedform-component)
 * [`<FunctionField>`](./Fields.md#functionfield)
@@ -64,7 +67,7 @@ title: "Reference"
 * [`<NullableBooleanInput>`](./Inputs.md#booleaninput-and-nullablebooleaninput)
 * [`<NumberField>`](./Fields.md#numberfield)
 * [`<NumberInput>`](./Inputs.md#numberinput)
-* [`<Pagination>`](./List.md#pagination)
+* [`<Pagination>`](./List.md#the-pagination-component)
 * [`<PasswordInput>`](./Inputs.md#passwordinput)
 * [`<Query>`](./Actions.md#legacy-components-query-mutation-and-withdataprovider)
 * [`<RadioButtonGroupInput>`](./Inputs.md#radiobuttongroupinput)
@@ -90,6 +93,7 @@ title: "Reference"
 * [`<SimpleList>`](./List.md#the-simplelist-component)
 * [`<SimpleShowLayout>`](./Show.md#the-simpleshowlayout-component)
 * [`<SingleFieldList>`](./List.md#the-singlefieldlist-component)
+* [`<SortButton>`](./List.md#the-sortbutton-component)
 * `<Tab>`
 * [`<TabbedForm>`](./CreateEdit.md#the-tabbedform-component)
 * [`<TabbedShowLayout>`](./Show.md#the-tabbedshowlayout-component)
@@ -99,6 +103,7 @@ title: "Reference"
 * `<Title>`
 * [`translate`](./Translation.md#withtranslate-hoc)
 * `<Toolbar>`
+* `<TopToolbar>`
 * [`<UrlField>`](./Fields.md#urlfield)
 * [`useAuthenticated`](./Authentication.md#useauthenticated-hook)
 * `useAuthProvider`
@@ -106,11 +111,11 @@ title: "Reference"
 * `useCheckAuth`
 * `useChoices`
 * [`useCreate`](./Actions.md#specialized-hooks)
-* `useCreateController`
+* [`useCreateController`](./CreateEdit.md#usecreatecontroller)
 * [`useDataProvider`](./Actions.md#usedataprovider-hook)
 * [`useDelete`](./Actions.md#specialized-hooks)
 * [`useDeleteMany`](./Actions.md#specialized-hooks)
-* `useEditController`
+* [`useEditController`](./CreateEdit.md#useeditcontroller)
 * `useFilterState`
 * [`useGetList`](./Actions.md#specialized-hooks)
 * [`useGetMany`](./Actions.md#specialized-hooks)
@@ -120,7 +125,7 @@ title: "Reference"
 * [`useGetOne`](./Actions.md#specialized-hooks)
 * `useGetPermissions`
 * `useInput`
-* `useListController`
+* [`useListController`](./List.md#uselistcontroller)
 * `useListParams`
 * `useLoading`
 * [`useLocale`](./Translation.md#uselocale-getting-the-current-locale)
@@ -142,7 +147,7 @@ title: "Reference"
 * `useReferenceManyFieldController`
 * [`useRefresh`](./Actions.md#handling-side-effects-in-usedataprovider)
 * [`useSetLocale`](./Translation.md#usesetlocale-changing-locale-at-runtime)
-* `useShowController`
+* [`useShowController`](./Show.md#useshowcontroller)
 * `useSortState`
 * [`useStyles`](./Theming.md#overriding-a-component-style)
 * `useSuggestions`
@@ -151,6 +156,7 @@ title: "Reference"
 * `useUpdateLoading`
 * [`useUpdateMany`](./Actions.md#specialized-hooks)
 * [`useUnselectAll`](./Actions.md#handling-side-effects-in-usedataprovider)
+* [`useWarnWhenUnsavedChanges`](./CreateEdit.md#warning-about-unsaved-changes)
 * `useVersion`
 * [`withDataProvider`](./Actions.md#legacy-components-query-mutation-and-withdataprovider)
 * [`withTranslate`](./Translation.md#withtranslate-hoc)

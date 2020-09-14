@@ -1,6 +1,7 @@
-import React, { cloneElement, Children } from 'react';
+import * as React from 'react';
+import { cloneElement, Children, FC, ReactElement } from 'react';
 import PropTypes from 'prop-types';
-import { isRequired, FieldTitle, composeValidators } from 'ra-core';
+import { isRequired, FieldTitle, composeValidators, InputProps } from 'ra-core';
 import { useFieldArray } from 'react-final-form-arrays';
 import { InputLabel, FormControl } from '@material-ui/core';
 
@@ -11,12 +12,12 @@ import sanitizeRestProps from './sanitizeRestProps';
  *
  *  @example
  *
- *      import { ArrayInput, SimpleFormIterator, DateInput, UrlInput } from 'react-admin';
+ *      import { ArrayInput, SimpleFormIterator, DateInput, TextInput } from 'react-admin';
  *
  *      <ArrayInput source="backlinks">
  *          <SimpleFormIterator>
  *              <DateInput source="date" />
- *              <UrlInput source="url" />
+ *              <TextInput source="url" />
  *          </SimpleFormIterator>
  *      </ArrayInput>
  *
@@ -47,7 +48,7 @@ import sanitizeRestProps from './sanitizeRestProps';
  *
  * @see https://github.com/final-form/react-final-form-arrays
  */
-const ArrayInput = ({
+const ArrayInput: FC<ArrayInputProps> = ({
     className,
     defaultValue,
     label,
@@ -98,6 +99,7 @@ const ArrayInput = ({
 };
 
 ArrayInput.propTypes = {
+    // @ts-ignore
     children: PropTypes.node,
     className: PropTypes.string,
     defaultValue: PropTypes.any,
@@ -117,4 +119,8 @@ ArrayInput.defaultProps = {
     options: {},
     fullWidth: true,
 };
+
+export interface ArrayInputProps extends InputProps {
+    children: ReactElement;
+}
 export default ArrayInput;

@@ -1,17 +1,18 @@
-import React, { FC, ReactElement } from 'react';
+import * as React from 'react';
+import { FC, ReactElement, SyntheticEvent, ReactNode } from 'react';
 import PropTypes from 'prop-types';
 import {
     Button as MuiButton,
     Tooltip,
     IconButton,
     useMediaQuery,
-    makeStyles,
     PropTypes as MuiPropTypes,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { ButtonProps as MuiButtonProps } from '@material-ui/core/Button';
 import { Theme } from '@material-ui/core';
 import classnames from 'classnames';
-import { useTranslate } from 'ra-core';
+import { Record, RedirectionSideEffect, useTranslate } from 'ra-core';
 
 /**
  * A generic Button with side icon. Only the icon is displayed on small screens.
@@ -43,6 +44,7 @@ const Button: FC<ButtonProps> = props => {
     const isXSmall = useMediaQuery((theme: Theme) =>
         theme.breakpoints.down('xs')
     );
+    const restProps = sanitizeButtonRestProps(rest);
 
     return isXSmall ? (
         label && !disabled ? (
@@ -51,7 +53,7 @@ const Button: FC<ButtonProps> = props => {
                     aria-label={translate(label, { _: label })}
                     className={className}
                     color={color}
-                    {...rest}
+                    {...restProps}
                 >
                     {children}
                 </IconButton>
@@ -61,7 +63,7 @@ const Button: FC<ButtonProps> = props => {
                 className={className}
                 color={color}
                 disabled={disabled}
-                {...rest}
+                {...restProps}
             >
                 {children}
             </IconButton>
@@ -73,7 +75,7 @@ const Button: FC<ButtonProps> = props => {
             size={size}
             aria-label={label ? translate(label, { _: label }) : undefined}
             disabled={disabled}
-            {...rest}
+            {...restProps}
         >
             {alignIcon === 'left' &&
                 children &&
@@ -130,12 +132,46 @@ interface Props {
     classes?: object;
     className?: string;
     color?: MuiPropTypes.Color;
+    component?: ReactNode;
+    to?: string | { pathname: string; search: string };
     disabled?: boolean;
     label?: string;
     size?: 'small' | 'medium' | 'large';
+    icon?: ReactElement;
+    redirect?: RedirectionSideEffect;
+    variant?: string;
+    // May be injected by Toolbar
+    basePath?: string;
+    handleSubmit?: (event?: SyntheticEvent<HTMLFormElement>) => Promise<Object>;
+    handleSubmitWithRedirect?: (redirect?: RedirectionSideEffect) => void;
+    invalid?: boolean;
+    onSave?: (values: object, redirect: RedirectionSideEffect) => void;
+    saving?: boolean;
+    submitOnEnter?: boolean;
+    pristine?: boolean;
+    record?: Record;
+    resource?: string;
+    undoable?: boolean;
 }
 
 export type ButtonProps = Props & MuiButtonProps;
+
+export const sanitizeButtonRestProps = ({
+    // The next props are injected by Toolbar
+    basePath,
+    handleSubmit,
+    handleSubmitWithRedirect,
+    invalid,
+    onSave,
+    pristine,
+    record,
+    redirect,
+    resource,
+    saving,
+    submitOnEnter,
+    undoable,
+    ...rest
+}: any) => rest;
 
 Button.propTypes = {
     alignIcon: PropTypes.oneOf(['left', 'right']),

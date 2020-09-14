@@ -1,13 +1,14 @@
-import React, { FC, ReactElement } from 'react';
+import * as React from 'react';
+import { FC, ReactElement, memo } from 'react';
 import PropTypes from 'prop-types';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import { Fab, makeStyles, useMediaQuery, Theme } from '@material-ui/core';
+import { Fab, useMediaQuery, Theme } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import ContentAdd from '@material-ui/icons/Add';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 import { useTranslate } from 'ra-core';
 
-import Button, { ButtonProps } from './Button';
+import Button, { ButtonProps, sanitizeButtonRestProps } from './Button';
 
 const CreateButton: FC<CreateButtonProps> = props => {
     const {
@@ -16,6 +17,7 @@ const CreateButton: FC<CreateButtonProps> = props => {
         classes: classesOverride,
         label = 'ra.action.create',
         icon = defaultIcon,
+        variant,
         ...rest
     } = props;
     const classes = useStyles(props);
@@ -30,7 +32,7 @@ const CreateButton: FC<CreateButtonProps> = props => {
             className={classnames(classes.floating, className)}
             to={`${basePath}/create`}
             aria-label={label && translate(label)}
-            {...rest as any}
+            {...sanitizeButtonRestProps(rest)}
         >
             {icon}
         </Fab>
@@ -40,7 +42,8 @@ const CreateButton: FC<CreateButtonProps> = props => {
             to={`${basePath}/create`}
             className={className}
             label={label}
-            {...rest as any}
+            variant={variant}
+            {...(rest as any)}
         >
             {icon}
         </Button>
@@ -83,5 +86,11 @@ CreateButton.propTypes = {
     label: PropTypes.string,
 };
 
-const enhance = onlyUpdateForKeys(['basePath', 'label', 'translate']);
-export default enhance(CreateButton);
+export default memo(CreateButton, (prevProps, nextProps) => {
+    return (
+        prevProps.basePath === nextProps.basePath &&
+        prevProps.label === nextProps.label &&
+        prevProps.translate === nextProps.translate &&
+        prevProps.to === nextProps.to
+    );
+});

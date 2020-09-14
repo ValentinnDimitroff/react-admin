@@ -1,4 +1,5 @@
-import React, { ReactNode, FunctionComponent } from 'react';
+import * as React from 'react';
+import { ReactNode, FunctionComponent } from 'react';
 import { useFormState } from 'react-final-form';
 import { FormSubscription } from 'final-form';
 import get from 'lodash/get';
@@ -63,6 +64,12 @@ interface Props extends ConnectedProps {
  *     </Edit>
  * );
  */
+const FormDataConsumer = ({ subscription, ...props }: ConnectedProps) => {
+    const formState = useFormState({ subscription });
+
+    return <FormDataConsumerView formData={formState.values} {...props} />;
+};
+
 export const FormDataConsumerView: FunctionComponent<Props> = ({
     children,
     form,
@@ -90,7 +97,7 @@ export const FormDataConsumerView: FunctionComponent<Props> = ({
 
     warning(
         typeof index !== 'undefined' && ret && !getSourceHasBeenCalled,
-        `You're using a FormDataConsumer inside an ArrayInput and you did not called the getSource function supplied by the FormDataConsumer component. This is required for your inputs to get the proper source.
+        `You're using a FormDataConsumer inside an ArrayInput and you did not call the getSource function supplied by the FormDataConsumer component. This is required for your inputs to get the proper source.
 
 <ArrayInput source="users">
     <SimpleFormIterator>
@@ -117,12 +124,6 @@ export const FormDataConsumerView: FunctionComponent<Props> = ({
     );
 
     return ret === undefined ? null : ret;
-};
-
-const FormDataConsumer = ({ subscription, ...props }: ConnectedProps) => {
-    const formState = useFormState({ subscription });
-
-    return <FormDataConsumerView formData={formState.values} {...props} />;
 };
 
 export default FormDataConsumer;

@@ -1,4 +1,5 @@
-import React, { useCallback, FunctionComponent } from 'react';
+import * as React from 'react';
+import { useCallback, FunctionComponent } from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -7,9 +8,9 @@ import {
     useInput,
     FieldTitle,
     useTranslate,
-    InputProps,
-    ChoicesProps,
+    ChoicesInputProps,
     useChoices,
+    warning,
 } from 'ra-core';
 
 import ResettableTextField from './ResettableTextField';
@@ -32,6 +33,7 @@ const sanitizeRestProps = ({
     filterToQuery,
     formClassName,
     initializeForm,
+    initialValue,
     input,
     isRequired,
     label,
@@ -42,6 +44,7 @@ const sanitizeRestProps = ({
     optionValue,
     optionText,
     disableValue,
+    pagination,
     perPage,
     record,
     reference,
@@ -142,8 +145,7 @@ const useStyles = makeStyles(
  *
  */
 const SelectInput: FunctionComponent<
-    ChoicesProps &
-        InputProps<TextFieldProps> &
+    ChoicesInputProps<TextFieldProps> &
         Omit<TextFieldProps, 'label' | 'helperText'>
 > = props => {
     const {
@@ -172,6 +174,17 @@ const SelectInput: FunctionComponent<
     } = props;
     const translate = useTranslate();
     const classes = useStyles(props);
+
+    warning(
+        source === undefined,
+        `If you're not wrapping the SelectInput inside a ReferenceInput, you must provide the source prop`
+    );
+
+    warning(
+        choices === undefined,
+        `If you're not wrapping the SelectInput inside a ReferenceInput, you must provide the choices prop`
+    );
+
     const { getChoiceText, getChoiceValue } = useChoices({
         optionText,
         optionValue,
@@ -260,7 +273,7 @@ const SelectInput: FunctionComponent<
 };
 
 SelectInput.propTypes = {
-    allowEmpty: PropTypes.bool.isRequired,
+    allowEmpty: PropTypes.bool,
     emptyText: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     emptyValue: PropTypes.any,
     choices: PropTypes.arrayOf(PropTypes.object),
@@ -275,13 +288,13 @@ SelectInput.propTypes = {
     ]).isRequired,
     optionValue: PropTypes.string.isRequired,
     disableValue: PropTypes.string,
+    resettable: PropTypes.bool,
     resource: PropTypes.string,
     source: PropTypes.string,
     translateChoice: PropTypes.bool,
 };
 
 SelectInput.defaultProps = {
-    allowEmpty: false,
     emptyText: '',
     emptyValue: '',
     options: {},

@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import * as React from 'react';
+import { FC } from 'react';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
@@ -28,9 +29,9 @@ const LinkToRelatedProducts: FC<FieldProps<Category>> = ({ record }) => {
                 pathname: '/products',
                 search: stringify({
                     page: 1,
-                    perPage: 25,
-                    sort: 'id',
-                    order: 'DESC',
+                    perPage: 20,
+                    sort: 'reference',
+                    order: 'ASC',
                     filter: JSON.stringify({ category_id: record.id }),
                 }),
             }}

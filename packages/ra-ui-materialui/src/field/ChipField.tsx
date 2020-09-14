@@ -1,7 +1,6 @@
-import React, { FunctionComponent } from 'react';
-import compose from 'recompose/compose';
+import * as React from 'react';
+import { FC, memo } from 'react';
 import get from 'lodash/get';
-import pure from 'recompose/pure';
 import Chip, { ChipProps } from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,14 +11,12 @@ import { FieldProps, InjectedFieldProps, fieldPropTypes } from './types';
 
 const useStyles = makeStyles(
     {
-        chip: { margin: 4 },
+        chip: { margin: 4, cursor: 'inherit' },
     },
     { name: 'RaChipField' }
 );
 
-export const ChipField: FunctionComponent<
-    FieldProps & InjectedFieldProps & ChipProps
-> = props => {
+export const ChipField: FC<ChipFieldProps> = memo<ChipFieldProps>(props => {
     const {
         className,
         classes: classesOverride,
@@ -51,22 +48,20 @@ export const ChipField: FunctionComponent<
             {...sanitizeRestProps(rest)}
         />
     );
-};
+});
 
-const EnhancedChipField = compose<
-    FieldProps & InjectedFieldProps & ChipProps,
-    FieldProps & ChipProps
->(pure)(ChipField);
-
-EnhancedChipField.defaultProps = {
+ChipField.defaultProps = {
     addLabel: true,
 };
 
-EnhancedChipField.propTypes = {
+ChipField.propTypes = {
     ...ChipField.propTypes,
     ...fieldPropTypes,
 };
 
-EnhancedChipField.displayName = 'EnhancedChipField';
+export interface ChipFieldProps
+    extends FieldProps,
+        InjectedFieldProps,
+        Omit<ChipProps, 'label'> {}
 
-export default EnhancedChipField;
+export default ChipField;

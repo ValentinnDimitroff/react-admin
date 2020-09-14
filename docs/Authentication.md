@@ -7,7 +7,7 @@ title: "Authentication"
 
 ![Logout button](./img/login.gif)
 
-React-admin lets you secure your admin app with the authentication strategy of your choice. Since there are many different possible strategies (Basic Auth, JWT, OAuth, etc.), react-admin simply provides hooks to execute your own authentication code.
+React-admin lets you secure your admin app with the authentication strategy of your choice. Since there are many possible strategies (Basic Auth, JWT, OAuth, etc.), react-admin simply provides hooks to execute your own authentication code.
 
 ## The `authProvider`
 
@@ -42,7 +42,7 @@ Let's see when react-admin calls the `authProvider`, and how to write one for yo
 
 ## Login Configuration
 
-Once an admin has an `authProvider`, react-admin enables a new page on the `/login` route, which displays a login form asking for username and password.
+Once an admin has an `authProvider`, react-admin enables a new page on the `/login` route, which displays a login form asking for a username and password.
 
 ![Default Login Form](./img/login-form.png)
 
@@ -82,7 +82,7 @@ Once the promise resolves, the login form redirects to the previous page, or to 
 
 ## Sending Credentials to the API
 
-Now that the user has logged in, you can use their credentials to communicate with the `dataProvider`. For that, you have to tweak, this time, the `dataProvider` function. As explained in the [Data providers documentation](DataProviders.md#adding-custom-headers), `simpleRestProvider` and `jsonServerProvider` take an `httpClient` as second parameter. That's the place where you can change request headers, cookies, etc.
+Now the user has logged in, you can use their credentials to communicate with the `dataProvider`. For that, you have to tweak, this time, the `dataProvider` function. As explained in the [Data providers documentation](DataProviders.md#adding-custom-headers), `simpleRestProvider` and `jsonServerProvider` take an `httpClient` as second parameter. That's the place where you can change request headers, cookies, etc.
 
 For instance, to pass the token obtained during login as an `Authorization` header, configure the Data Provider as follows:
 
@@ -115,7 +115,7 @@ If you have a custom REST client, don't forget to add credentials yourself.
 
 As soon as you provide an `authProvider` prop to `<Admin>`, react-admin displays a logout button in the top bar (or in the menu on mobile). When the user clicks on the logout button, this calls the `authProvider.logout()` method, and removes potentially sensitive data from the Redux store. Then the user gets redirected to the login page.
 
-So it's the responsibility of the `authProvider` to cleanup the current authentication data. For instance, if the authentication was a token stored in local storage, here the code to remove it:
+So it's the responsibility of the `authProvider` to clean up the current authentication data. For instance, if the authentication was a token stored in local storage, here the code to remove it:
 
 ```js
 // in src/authProvider.js
@@ -212,7 +212,7 @@ For all these cases, it's up to you to implement your own `LoginPage` component,
 
 ```jsx
 // in src/App.js
-import React from 'react';
+import * as React from "react";
 import { Admin } from 'react-admin';
 
 import MyLoginPage from './MyLoginPage';
@@ -229,7 +229,8 @@ Use the `useLogin` and `useLogout` hooks in your custom `LoginPage` and `LogoutB
 
 ```jsx
 // in src/MyLoginPage.js
-import React, { useState } from 'react';
+import * as React from 'react';
+import { useState } from 'react';
 import { useLogin, useNotify, Notification } from 'react-admin';
 import { ThemeProvider } from '@material-ui/styles';
 
@@ -258,7 +259,8 @@ const MyLoginPage = ({ theme }) => {
 export default MyLoginPage;
 
 // in src/MyLogoutButton.js
-import React, { forwardRef } from 'react';
+import * as React from 'react';
+import { forwardRef } from 'react';
 import { useLogout } from 'react-admin';
 import MenuItem from '@material-ui/core/MenuItem';
 import ExitIcon from '@material-ui/icons/PowerSettingsNew';
@@ -290,7 +292,7 @@ export default MyLogoutButton;
 
 ## `useAuthenticated()` Hook
 
-If you add [custom pages](./Actions.md), of if you [create an admin app from scratch](./CustomApp.md), you may need to secure access to pages manually. That's the purpose of the `useAuthenticated()` hook, which calls the `authProvider.checkAuth()` method on mount, and redirects to login if it returns a rejected Promise.
+If you add [custom pages](./Actions.md), or if you [create an admin app from scratch](./CustomApp.md), you may need to secure access to pages manually. That's the purpose of the `useAuthenticated()` hook, which calls the `authProvider.checkAuth()` method on mount, and redirects to login if it returns a rejected Promise.
 
 ```jsx
 // in src/MyPage.js
@@ -348,7 +350,7 @@ const App = () => (
 
 To avoid rendering a component and force waiting for the `authProvider` response, use the `useAuthState()` hook instead of the `useAuthenticated()` hook. It returns an object with 3 properties:
 
-- `loading`: `true` just after mount, while the `authProvider` is being called. `false` once the `authProvider` has answered
+- `loading`: `true` just after mount, while the `authProvider` is being called. `false` once the `authProvider` has answered.
 - `loaded`: the opposite of `loading`.
 - `authenticated`: `undefined` while loading. then `true` or `false` depending on the `authProvider` response.
 

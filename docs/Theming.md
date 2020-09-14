@@ -15,7 +15,7 @@ Here is an example customizing an `EditButton` component inside a `Datagrid`, us
 
 {% raw %}
 ```jsx
-import React from 'react';
+import * as React from "react";
 import { NumberField, List, Datagrid, TextField, EditButton } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -50,7 +50,7 @@ Here is an example using the `classes` property of the `Filter` and `List` compo
 
 {% raw %}
 ```jsx
-import React from 'react';
+import * as React from "react";
 import {
     BooleanField,
     Datagrid,
@@ -146,7 +146,7 @@ Sometimes you want the format to depend on the value. The following example show
 
 {% raw %}
 ```jsx
-import React from 'react';
+import * as React from "react";
 import { NumberField, List, Datagrid, TextField, EditButton } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
 import classnames from 'classnames';
@@ -185,11 +185,11 @@ export const PostList = props => (
 ```
 {% endraw %}
 
-Furthermore, you may extract this highlighting strategy into an Higher Order Component if you'd like to reuse it for other components as well:
+Furthermore, you may extract this highlighting strategy into a Higher Order Component if you'd like to reuse it for other components as well:
 
 {% raw %}
 ```jsx
-import React from 'react';
+import * as React from "react";
 import { NumberField, List, Datagrid, TextField, EditButton } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
 import classnames from 'classnames';
@@ -254,7 +254,7 @@ Here is an example for a responsive list of posts, displaying a `SimpleList` on 
 
 ```jsx
 // in src/posts.js
-import React from 'react';
+import * as React from "react";
 import { useMediaQuery } from '@material-ui/core';
 import { List, SimpleList, Datagrid, TextField, ReferenceField, EditButton } from 'react-admin';
 
@@ -310,7 +310,7 @@ const App = () => (
 
 ## Writing a Custom Theme
 
-If you need more fine tuning, you'll need to write your own `theme` object, following [Material UI themes documentation](https://material-ui.com/customization/themes/). Material UI merges custom theme objects with the default theme.
+If you need more fine-tuning, you'll need to write your own `theme` object, following [Material UI themes documentation](https://material-ui.com/customization/themes/). Material UI merges custom theme objects with the default theme.
 
 ```jsx
 import { createMuiTheme } from '@material-ui/core/styles';
@@ -413,7 +413,7 @@ export default MyLayout;
 You can replace the default user menu by your own by setting the `userMenu` prop of the `<AppBar>` component. For instance, to add custom menu items, just decorate the default `<UserMenu>` by adding children to it:
 
 ```jsx
-import React from 'react';
+import * as React from "react";
 import { AppBar, UserMenu, MenuItemLink } from 'react-admin';
 import SettingsIcon from '@material-ui/icons/Settings';
 
@@ -463,7 +463,7 @@ const MyCustomIcon = () => {
     )
 };
 
-const MyUserMenu = props => (<UserMenu {...props} icon={MyCustomIcon} />);
+const MyUserMenu = props => (<UserMenu {...props} icon={<MyCustomIcon />} />);
 
 const MyAppBar = props => <AppBar {...props} userMenu={<MyUserMenu />} />;
 ```
@@ -518,7 +518,8 @@ For more custom layouts, write a component from scratch. It must contain a `{chi
 
 ```jsx
 // in src/MyLayout.js
-import React, { useEffect } from 'react';
+import * as React from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
@@ -615,7 +616,7 @@ Here is an example customization for `<AppBar>` to include a company logo in the
 
 ```jsx
 // in src/MyAppBar.js
-import React from 'react';
+import * as React from "react";
 import { AppBar } from 'react-admin';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -657,7 +658,7 @@ To use this custom `MyAppBar` component, pass it as prop to a custom `Layout`, a
 
 ```jsx
 // in src/MyLayout.js
-import React from 'react';
+import * as React from "react";
 import { Layout } from 'react-admin';
 import MyAppBar from './MyAppBar';
 
@@ -681,6 +682,9 @@ const App = () => (
 
 ![custom AppBar](./img/custom_appbar.png)
 
+
+**Tip**: You can change the color of the `<AppBar>` by setting the `color` prop to `default`, `inherit`, `primary`, `secondary` or `transparent`. The default value is `secondary`.
+
 ## Replacing The AppBar
 
 For more drastic changes of the top component, you will probably want to create an `<AppBar>` from scratch instead of just passing children to react-admin's `<AppBar>`. 
@@ -689,7 +693,7 @@ By default, React-admin uses [Material-ui's `<AppBar>` component](https://materi
 
 ```jsx
 // in src/MyAppBar.js
-import React from 'react';
+import * as React from "react";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -715,7 +719,8 @@ If you want to add or remove menu items, for instance to link to non-resources p
 
 ```jsx
 // in src/Menu.js
-import React, { createElement } from 'react';
+import * as React from 'react';
+import { createElement } from 'react';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from '@material-ui/core';
 import { MenuItemLink, getResources } from 'react-admin';
@@ -807,7 +812,8 @@ If the default active style does not suit your tastes, you can override it by pa
 
 ```jsx
 // in src/Menu.js
-import React, { createElement } from 'react';
+import * as React from 'react';
+import { createElement } from 'react';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from '@material-ui/core';
 import { MenuItemLink, getResources } from 'react-admin';
@@ -872,11 +878,11 @@ const App = () => (
 
 ### Changing the Icon
 
-It is possible to use a completely [custom logout button](./Authentication.md#the-datagrid-component) or you can simply override some properties of the default button. If you want to change the icon, you can use the default `<Logout>` component and pass a different icon as the `icon` prop.
+It is possible to use a completely [custom logout button](./Admin.md#logoutbutton) or you can simply override some properties of the default button. If you want to change the icon, you can use the default `<Logout>` component and pass a different icon as the `icon` prop.
 
 ```jsx
 import { Admin, Logout } from 'react-admin';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const MyLogoutButton = props => <Logout {...props} icon={<ExitToAppIcon/>} />;
 
@@ -933,7 +939,7 @@ Whenever a client-side error happens in react-admin, the user sees a default err
 
 ```jsx
 // in src/MyError.js
-import React from 'react';
+import * as React from "react";
 import Button from '@material-ui/core/Button';
 import ErrorIcon from '@material-ui/icons/Report';
 import History from '@material-ui/icons/History';
@@ -1003,10 +1009,10 @@ Display a circular progress component with optional messages. Display the same l
 
 Supported props:
 
-Prop | Type | Default | Descriptions
----|---|---|---
-`loadingPrimary` |`String` | `ra.page.loading` | Label to use for primary loading message
-`loadingSecondary` |`String` | `ra.message.loading` | Label to use for secondary loading message
+| Prop               | Required | Type      | Default              | Descriptions                               |
+| ------------------ | -------- | --------- | -------------------- | ------------------------------------------ |
+| `loadingPrimary`   | Optional | `string`  | `ra.page.loading`    | Label to use for primary loading message   |
+| `loadingSecondary` | Optional | `string`  | `ra.message.loading` | Label to use for secondary loading message |
 
 Usage:
 
